@@ -9,7 +9,8 @@
     "lint": "npx eslint app/**",
     "dev": "npx remix dev -c \"npm start\"",
     "build": "npx remix build",
-    "start": "npx remix-serve build/index.js"
+    "start": "npx remix-serve build/index.js",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Mike Pottebaum",
@@ -32,7 +33,9 @@
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "8.53.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
+    "husky": "^8.0.3",
     "jest": "29.7.0",
+    "lint-staged": "^15.0.2",
     "prettier": "3.0.3",
     "tailwindcss": "3.3.5",
     "typescript": "5.2.2"
