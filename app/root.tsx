@@ -14,9 +14,6 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div className="flex">
-          <h1 className="flex">Hello worldasdf</h1>
-        </div>
         <Outlet />
 
         <Scripts />
