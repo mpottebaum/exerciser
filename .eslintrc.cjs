@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
   extends: [
-    "@remix-run/eslint-config",
-    "@remix-run/eslint-config/jest-testing-library",
-    "plugin:tailwindcss/recommended"
+    '@remix-run/eslint-config',
+    '@remix-run/eslint-config/jest-testing-library',
+    'plugin:tailwindcss/recommended'
   ],
   overrides: [
     {
@@ -11,4 +11,7 @@ module.exports = {
       parser: '@typescript-eslint/parser',
     },
   ],
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn',
+  }
 };
