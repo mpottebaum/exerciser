@@ -1,23 +1,14 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { mockWorkoutRoutines } from '~/mock-data'
-// import { db, dbTables } from '~/db'
+import { db, dbTables } from '~/db/index.server'
 import { WorkoutRoutine } from '~/components'
 import { useState } from 'react'
 import type { WorkoutRoutine as WorkoutRoutineType } from '~/types'
 import { Layout } from '~/components/layout'
 
 export async function loader() {
-  // const result = await db.from(dbTables.workouts).select()
-  // return json(result.data)
-  const workoutRoutines = mockWorkoutRoutines
-  return json([
-    workoutRoutines[0],
-    {
-      ...workoutRoutines[0],
-      id: 2,
-    },
-  ])
+  const result = await db.from(dbTables.workouts).select()
+  return json(result.data)
 }
 
 export default function () {

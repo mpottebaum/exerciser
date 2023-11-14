@@ -21,7 +21,7 @@ export function WorkoutRoutine({
   isOpen = true,
   setIsOpen,
 }: WorkoutProps) {
-  const { name, exercises } = workoutRoutine
+  const { name, exercises = [] } = workoutRoutine
   const isCard = variant === 'card'
   const isDetails = variant === 'details'
   const handleClick = () => {

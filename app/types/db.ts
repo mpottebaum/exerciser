@@ -5,19 +5,14 @@ interface SupabaseRecord {
 
 export interface DBWorkout extends SupabaseRecord {
   type: 'routine' | 'session'
-  name?: string
+  name: string
   date?: string
 }
 
 export interface DBExercise extends SupabaseRecord {
   type: 'lift' | 'cardio'
-  is_template: boolean
-  name?: string
+  is_template: boolean // default=false
   workout_id?: number
   template_id?: number // foreign key of exercise template
-  weight?: number
-  sets?: number
-  reps_in_set?: number
-  time?: number
-  speed?: number
+  custom_properties: string // json object w/ custom props
 }

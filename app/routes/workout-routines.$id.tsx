@@ -1,22 +1,21 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Layout, WorkoutRoutine } from '~/components'
-import { mockWorkoutRoutines } from '~/mock-data'
+import { db, dbTables } from '~/db/index.server'
 import { exerciseIsCardio, exerciseIsLift } from '~/utils'
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const id = params.id ? +params.id : params.id
-  if (id) {
-    const workoutRoutine = mockWorkoutRoutines.find((w) => w.id === id)
-    if (workoutRoutine) {
-      const liftExercises = workoutRoutine.exercises.filter(exerciseIsLift)
-      const cardioExercises = workoutRoutine.exercises.filter(exerciseIsCardio)
-      return json({
-        workoutRoutine,
-        liftExercises,
-        cardioExercises,
-      })
-    }
+  const id = params.id ? +params.id : params.id ?? ''
+  const { data } = await db.from(dbTables.workouts).select().eq('id', id)
+  if (data) {
+    const [workoutRoutine] = data
+    const liftExercises = workoutRoutine.exercises?.filter(exerciseIsLift)
+    const cardioExercises = workoutRoutine.exercises?.filter(exerciseIsCardio)
+    return json({
+      workoutRoutine,
+      liftExercises,
+      cardioExercises,
+    })
   }
   throw new Response('Not found', {
     status: 404,
