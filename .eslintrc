@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "extends": [
+    "@remix-run/eslint-config",
+    "@remix-run/eslint-config/jest-testing-library",
+    "plugin:tailwindcss/recommended"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "warn"
+  }
+}
