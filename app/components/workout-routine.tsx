@@ -8,6 +8,8 @@ export interface WorkoutProps {
   linkTo?: string
   liftExercises?: Lift[]
   cardioExercises?: Cardio[]
+  isOpen?: boolean
+  setIsOpen?: (isOpen: boolean) => void
 }
 
 export function WorkoutRoutine({
@@ -16,44 +18,58 @@ export function WorkoutRoutine({
   variant = 'card',
   liftExercises,
   cardioExercises,
+  isOpen = true,
+  setIsOpen,
 }: WorkoutProps) {
   const { name, exercises } = workoutRoutine
+  const isCard = variant === 'card'
+  const isDetails = variant === 'details'
+  const handleClick = () => {
+    if (isCard && !isOpen && setIsOpen) {
+      setIsOpen(true)
+    }
+  }
   return (
-    <AddLink to={linkTo}>
-      <article className="flex flex-col items-start rounded border-2 border-black p-4">
+    <AddLink to={isOpen ? linkTo : undefined}>
+      <article
+        onClick={handleClick}
+        className="flex flex-col items-start border-b-2 border-black p-4"
+      >
         <h2 className="text-2xl">{name}</h2>
-        <section className="w-full">
-          <h3 className="text-lg">Exercises</h3>
-          {variant === 'card' && (
-            <ul>
-              {exercises.map((exercise) => (
-                <li key={exercise.id}>
-                  <article className="flex flex-row">
-                    <h4 className="text-base">{exercise.name}</h4>
-                  </article>
-                </li>
-              ))}
-            </ul>
-          )}
-          {variant === 'details' && (
-            <>
-              {liftExercises && (
-                <div className="pb-4">
+        {isOpen && (
+          <section className="w-full">
+            <h3 className="text-lg">Exercises</h3>
+            {isCard && (
+              <ul>
+                {exercises.map((exercise) => (
+                  <li key={exercise.id}>
+                    <article className="flex flex-row">
+                      <h4 className="text-base">{exercise.name}</h4>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {isDetails && (
+              <>
+                {liftExercises && (
+                  <div className="pb-4">
+                    <ExerciseTable
+                      exercises={liftExercises}
+                      headers={['name', 'weight', 'sets', 'repsInSet']}
+                    />
+                  </div>
+                )}
+                {cardioExercises && (
                   <ExerciseTable
-                    exercises={liftExercises}
-                    headers={['name', 'weight', 'sets', 'repsInSet']}
+                    exercises={cardioExercises}
+                    headers={['name', 'time', 'speed']}
                   />
-                </div>
-              )}
-              {cardioExercises && (
-                <ExerciseTable
-                  exercises={cardioExercises}
-                  headers={['name', 'time', 'speed']}
-                />
-              )}
-            </>
-          )}
-        </section>
+                )}
+              </>
+            )}
+          </section>
+        )}
       </article>
     </AddLink>
   )

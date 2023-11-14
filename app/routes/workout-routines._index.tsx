@@ -2,7 +2,10 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { mockWorkoutRoutines } from '~/mock-data'
 // import { db, dbTables } from '~/db'
-import { Button, Input, WorkoutRoutine } from '~/components'
+import { WorkoutRoutine } from '~/components'
+import { useState } from 'react'
+import type { WorkoutRoutine as WorkoutRoutineType } from '~/types'
+import { Layout } from '~/components/layout'
 
 export async function loader() {
   // const result = await db.from(dbTables.workouts).select()
@@ -19,29 +22,33 @@ export async function loader() {
 
 export default function () {
   const workouts = useLoaderData<typeof loader>()
+  const [activeRoutine, setActiveRoutine] = useState<WorkoutRoutineType | null>(
+    null,
+  )
   return (
-    <main className="flex w-full flex-col items-center p-1">
-      <section className="flex w-full max-w-md flex-col items-center">
-        <header className="flex w-full flex-row justify-between p-4">
-          <h1>Workout Routines</h1>
-          <Button linkTo="/workout-routines/new">+</Button>
-        </header>
-        <section className="w-full">
-          <ul className="w-full">
-            {workouts?.map((workout) => (
-              <li key={workout.id}>
-                <div className="pb-4">
+    <Layout actionBtnLabel="+ routine" actionBtnLink="/workout-routines/new">
+      <article className="flex w-full flex-col">
+        <section className="flex w-full flex-col items-center">
+          <header className="flex w-full flex-row border-b-2  border-black p-4">
+            <h1 className="text-3xl">Workout Routines</h1>
+          </header>
+          <section className="w-full">
+            <ul className="w-full">
+              {workouts?.map((workout) => (
+                <li key={workout.id}>
                   <WorkoutRoutine
                     workoutRoutine={workout}
                     variant="card"
                     linkTo={`/workout-routines/${workout.id}`}
+                    isOpen={activeRoutine?.id === workout.id}
+                    setIsOpen={() => setActiveRoutine(workout)}
                   />
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </section>
         </section>
-      </section>
-    </main>
+      </article>
+    </Layout>
   )
 }

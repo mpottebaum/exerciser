@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { WorkoutRoutine } from '~/components'
+import { Layout, WorkoutRoutine } from '~/components'
 import { mockWorkoutRoutines } from '~/mock-data'
 import { exerciseIsCardio, exerciseIsLift } from '~/utils'
 
@@ -27,13 +27,18 @@ export default function () {
   const { workoutRoutine, liftExercises, cardioExercises } =
     useLoaderData<typeof loader>()
   return (
-    <article className="p-1">
-      <WorkoutRoutine
-        variant="details"
-        workoutRoutine={workoutRoutine}
-        liftExercises={liftExercises}
-        cardioExercises={cardioExercises}
-      />
-    </article>
+    <Layout
+      actionBtnLabel="+ Exercise"
+      actionBtnLink="/workout-routines/1/exercise/new"
+    >
+      <article className="p-1">
+        <WorkoutRoutine
+          variant="details"
+          workoutRoutine={workoutRoutine}
+          liftExercises={liftExercises}
+          cardioExercises={cardioExercises}
+        />
+      </article>
+    </Layout>
   )
 }
