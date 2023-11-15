@@ -40,3 +40,18 @@ export interface Cardio extends ExerciseBase {
 export type Exercise = Lift | Cardio
 
 export type ExerciseType = 'lift' | 'cardio'
+
+export type NewLift = Pick<Lift, 'weight' | 'sets' | 'repsInSet'>
+
+export type NewCardio = Pick<Cardio, 'time' | 'speed'>
+
+export type NewExercise = NewLift | NewCardio
+
+export interface CustomExerciseInput<T extends NewExercise> {
+  name: keyof T
+  type: HTMLInputElement['type']
+  options?: {
+    label?: string
+    value: string
+  }
+}
