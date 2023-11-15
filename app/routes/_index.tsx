@@ -1,5 +1,6 @@
 import { redirect } from '@remix-run/node'
+import { Routes } from '~/constants/ui'
 
 export async function loader() {
-  throw redirect('/workout-routines', 302)
+  throw redirect(Routes.HOME, 302)
 }

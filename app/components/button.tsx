@@ -3,6 +3,7 @@ import { AddLink } from './add-link'
 export type ButtonProps = {
   variant?: 'primary' | 'secondary'
   linkTo?: string
+  linkState?: Record<string, string>
 } & React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
@@ -11,11 +12,12 @@ export type ButtonProps = {
 export function Button({
   variant = 'primary',
   linkTo,
+  linkState,
   children,
   ...buttonProps
 }: ButtonProps) {
   return (
-    <AddLink to={linkTo}>
+    <AddLink to={linkTo} state={linkState}>
       {variant === 'primary' && (
         <button
           {...buttonProps}

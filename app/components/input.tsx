@@ -13,10 +13,20 @@ export function Input({ label, name, ...inputProps }: InputProps) {
           <label className="uppercase" htmlFor={name}>
             {label}
           </label>
-          <input className="w-full" name={name} {...inputProps} />
+          <input
+            className="w-full border border-black"
+            name={name}
+            {...inputProps}
+          />
         </div>
       )}
-      {!label && <input name={name} {...inputProps} />}
+      {!label && (
+        <input
+          className="w-full border border-black"
+          name={name}
+          {...inputProps}
+        />
+      )}
     </>
   )
 }

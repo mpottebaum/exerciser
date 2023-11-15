@@ -1,10 +1,11 @@
 import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { generatePath, useLoaderData } from '@remix-run/react'
 import { db, dbTables } from '~/db/index.server'
 import { WorkoutRoutine } from '~/components'
 import { useState } from 'react'
 import type { WorkoutRoutine as WorkoutRoutineType } from '~/types'
 import { Layout } from '~/components/layout'
+import { Routes } from '~/constants/ui'
 
 export async function loader() {
   const result = await db.from(dbTables.workouts).select()
@@ -17,7 +18,10 @@ export default function () {
     null,
   )
   return (
-    <Layout actionBtnLabel="+ routine" actionBtnLink="/workout-routines/new">
+    <Layout
+      actionBtnLabel="+ routine"
+      actionBtnProps={{ linkTo: Routes.CREATE_WORKOUT_ROUTINE }}
+    >
       <article className="flex w-full flex-col">
         <section className="flex w-full flex-col items-center">
           <header className="flex w-full flex-row border-b-2  border-black p-4">
@@ -30,7 +34,9 @@ export default function () {
                   <WorkoutRoutine
                     workoutRoutine={workout}
                     variant="card"
-                    linkTo={`/workout-routines/${workout.id}`}
+                    linkTo={generatePath(Routes.WORKOUT_ROUTINE, {
+                      id: workout.id,
+                    })}
                     isOpen={activeRoutine?.id === workout.id}
                     setIsOpen={() => setActiveRoutine(workout)}
                   />

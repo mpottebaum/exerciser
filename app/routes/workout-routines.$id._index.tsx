@@ -1,6 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { generatePath, useLoaderData } from '@remix-run/react'
 import { Layout, WorkoutRoutine } from '~/components'
+import { Routes } from '~/constants/ui'
 import { db, dbTables } from '~/db/index.server'
 import { exerciseIsCardio, exerciseIsLift } from '~/utils'
 
@@ -28,7 +29,11 @@ export default function () {
   return (
     <Layout
       actionBtnLabel="+ Exercise"
-      actionBtnLink="/workout-routines/1/exercise/new"
+      actionBtnProps={{
+        linkTo: generatePath(Routes.CREATE_WORKOUT_ROUTINE_EXERCISE, {
+          id: workoutRoutine.id,
+        }),
+      }}
     >
       <article className="p-1">
         <WorkoutRoutine

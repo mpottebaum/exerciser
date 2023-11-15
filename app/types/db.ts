@@ -16,3 +16,5 @@ export interface DBExercise extends SupabaseRecord {
   template_id?: number // foreign key of exercise template
   custom_properties: string // json object w/ custom props
 }
+
+export type NewDBWorkoutRoutine = Pick<DBWorkout, 'name' | 'type'>
