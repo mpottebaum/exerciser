@@ -1,3 +1,6 @@
+import type { z } from 'zod'
+import type { ExerciseTypeEnum } from './zod-schemas'
+
 interface WorkoutBase {
   // properties shared by all workouts
   id: number
@@ -39,7 +42,7 @@ export interface Cardio extends ExerciseBase {
 
 export type Exercise = Lift | Cardio
 
-export type ExerciseType = 'lift' | 'cardio'
+export type ExerciseType = z.infer<typeof ExerciseTypeEnum>
 
 export type NewLift = Pick<Lift, 'weight' | 'sets' | 'repsInSet'>
 
