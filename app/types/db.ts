@@ -1,20 +1,9 @@
-interface SupabaseRecord {
-  id: number
-  created_at: string
-}
+import type { z } from 'zod'
+import type { dbExerciseSchema } from '~/schemas'
+import type { dbWorkoutSchema } from '~/schemas/workout'
 
-export interface DBWorkout extends SupabaseRecord {
-  type: 'routine' | 'session'
-  name: string
-  date?: string
-}
+export type DBWorkout = z.infer<typeof dbWorkoutSchema>
 
-export interface DBExercise extends SupabaseRecord {
-  type: 'lift' | 'cardio'
-  is_template: boolean // default=false
-  workout_id?: number
-  template_id?: number // foreign key of exercise template
-  custom_properties: string // json object w/ custom props
-}
+export type DBExercise = z.infer<typeof dbExerciseSchema>
 
 export type NewDBWorkoutRoutine = Pick<DBWorkout, 'name' | 'type'>

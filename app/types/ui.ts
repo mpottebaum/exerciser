@@ -1,29 +1,27 @@
 import type { z } from 'zod'
-import type { ExerciseTypeEnum, cardioSchema, liftSchema } from '../schemas'
+import type {
+  ExerciseTypeEnum,
+  cardioSchema,
+  exerciseSchema,
+  liftSchema,
+} from '../schemas'
+import type {
+  workoutRoutineSchema,
+  workoutSchema,
+  workoutSessionSchema,
+} from '~/schemas/workout'
 
-interface WorkoutBase {
-  // properties shared by all workouts
-  id: number
-  exercises: Exercise[]
-}
+export type WorkoutRoutine = z.infer<typeof workoutRoutineSchema>
 
-export interface WorkoutRoutine extends WorkoutBase {
-  type: 'routine'
-  name: string
-}
+export type WorkoutSession = z.infer<typeof workoutSessionSchema>
 
-export interface WorkoutSession extends WorkoutBase {
-  type: 'session'
-  date: string // UTC
-}
-
-export type Workout = WorkoutRoutine | WorkoutSession
+export type Workout = z.infer<typeof workoutSchema>
 
 export type Lift = z.infer<typeof liftSchema>
 
 export type Cardio = z.infer<typeof cardioSchema>
 
-export type Exercise = Lift | Cardio
+export type Exercise = z.infer<typeof exerciseSchema>
 
 export type ExerciseType = z.infer<typeof ExerciseTypeEnum>
 
