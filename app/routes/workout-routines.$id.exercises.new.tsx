@@ -1,40 +1,13 @@
 import { type ActionFunctionArgs, redirect } from '@remix-run/node'
 import { Form, generatePath, useSearchParams } from '@remix-run/react'
-import { z } from 'zod'
 import { Button, Input } from '~/components'
+import { exerciseTypeInputs } from '~/constants/shared'
 import { Routes } from '~/constants/ui'
-import { db, dbTables } from '~/db/index.server'
-import {
-  type CustomExerciseInput,
-  type ExerciseType,
-  type NewCardio,
-  type NewLift,
-  ExerciseTypeEnum,
-  newLiftCustomPropsSchema,
-  newCardioCustomPropsSchema,
-  newExerciseSchema,
-} from '~/types'
+import { createWorkoutRoutineExercise } from '~/db/workout-routines.server'
+import { formDataValue } from '~/schemas'
+import type { ExerciseType } from '~/types'
 
 const exerciseTypes: ExerciseType[] = ['cardio', 'lift']
-
-const liftCustomInputs: CustomExerciseInput<NewLift>[] = [
-  { name: 'weight', type: 'number' },
-  { name: 'sets', type: 'number' },
-  { name: 'repsInSet', type: 'number' },
-]
-
-const cardioCustomInputs: CustomExerciseInput<NewCardio>[] = [
-  { name: 'time', type: 'number' },
-  { name: 'speed', type: 'number' },
-]
-
-const exerciseTypeInputs: Record<
-  ExerciseType,
-  CustomExerciseInput<NewLift>[] | CustomExerciseInput<NewCardio>[]
-> = {
-  cardio: cardioCustomInputs,
-  lift: liftCustomInputs,
-}
 
 export default function () {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -73,46 +46,15 @@ export default function () {
   )
 }
 
-const exerciseTypeCustomPropsSchemas: Record<
-  ExerciseType,
-  typeof newLiftCustomPropsSchema | typeof newCardioCustomPropsSchema
-> = {
-  lift: newLiftCustomPropsSchema,
-  cardio: newCardioCustomPropsSchema,
-}
-
-type CustomProperties = Record<string, string | number | null>
-
 export async function action({ params, request }: ActionFunctionArgs) {
-  const { id: workoutRoutineId } = params
+  const { id } = params
+  const workoutRoutineId = formDataValue.parse(id)
   const formData = await request.formData()
   formData.forEach((val, key) => console.log({ val, key }))
-  const name = formData.get('name')
-  const isTemplate = formData.get('template') === 'on'
-  const type = ExerciseTypeEnum.parse(formData.get('type'))
-  const customInputs = exerciseTypeInputs[type]
-  const customProperties: CustomProperties = customInputs.reduce(
-    (acc, { name, type: inputType }) => {
-      const stringDatum = z.string().parse(formData.get(name))
-      const parsedDatum = inputType === 'number' ? +stringDatum : stringDatum
-      acc[name] = parsedDatum
-      return acc
-    },
-    {} as CustomProperties,
-  )
-  const customPropsSchema = exerciseTypeCustomPropsSchemas[type]
-  const validatedCustomProps = customPropsSchema.parse(customProperties)
-  const newExercise = newExerciseSchema.parse({
-    name,
-    type,
-    is_template: isTemplate,
-    workout_id: workoutRoutineId ? +workoutRoutineId : undefined,
-    custom_properties: JSON.stringify(validatedCustomProps),
+  const { data, error } = await createWorkoutRoutineExercise({
+    workoutRoutineId,
+    formData,
   })
-  const { data, error } = await db
-    .from(dbTables.exercises)
-    .insert(newExercise)
-    .select()
   if (data) {
     const [dbExercise] = data
     throw redirect(

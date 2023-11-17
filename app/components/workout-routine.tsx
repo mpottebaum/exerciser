@@ -3,7 +3,7 @@ import { AddLink } from './add-link'
 import { ExerciseTable } from './exercise-table'
 
 export interface WorkoutProps {
-  workoutRoutine: WorkoutRoutine
+  workoutRoutine: Pick<WorkoutRoutine, 'name'>
   variant?: 'card' | 'details'
   linkTo?: string
   liftExercises?: Lift[]
@@ -21,7 +21,7 @@ export function WorkoutRoutine({
   isOpen = true,
   setIsOpen,
 }: WorkoutProps) {
-  const { name, exercises = [] } = workoutRoutine
+  const { name } = workoutRoutine
   const isCard = variant === 'card'
   const isDetails = variant === 'details'
   const handleClick = () => {
@@ -38,18 +38,7 @@ export function WorkoutRoutine({
         <h2 className="text-2xl">{name}</h2>
         {isOpen && (
           <section className="w-full">
-            <h3 className="text-lg">Exercises</h3>
-            {isCard && (
-              <ul>
-                {exercises.map((exercise) => (
-                  <li key={exercise.id}>
-                    <article className="flex flex-row">
-                      <h4 className="text-base">{exercise.name}</h4>
-                    </article>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {isCard && <p>expando</p>}
             {isDetails && (
               <>
                 {liftExercises && (

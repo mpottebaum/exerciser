@@ -1,5 +1,5 @@
 import type { z } from 'zod'
-import type { ExerciseTypeEnum } from './zod-schemas'
+import type { ExerciseTypeEnum, cardioSchema, liftSchema } from '../schemas'
 
 interface WorkoutBase {
   // properties shared by all workouts
@@ -19,26 +19,9 @@ export interface WorkoutSession extends WorkoutBase {
 
 export type Workout = WorkoutRoutine | WorkoutSession
 
-interface ExerciseBase {
-  // properties shared by all exercises
-  id: number
-  name: string
-  isTemplate: boolean
-  type: ExerciseType
-}
+export type Lift = z.infer<typeof liftSchema>
 
-export interface Lift extends ExerciseBase {
-  type: 'lift'
-  weight: number
-  sets: number
-  repsInSet: number
-}
-
-export interface Cardio extends ExerciseBase {
-  type: 'cardio'
-  time: number // int (seconds)
-  speed: number // float
-}
+export type Cardio = z.infer<typeof cardioSchema>
 
 export type Exercise = Lift | Cardio
 
@@ -58,3 +41,5 @@ export interface CustomExerciseInput<T extends NewExercise> {
     value: string
   }
 }
+
+export type CustomProperties = Record<string, string | number | null>
